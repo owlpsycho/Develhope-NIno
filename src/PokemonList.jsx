@@ -10,7 +10,6 @@ export function PokemonList() {
     const fetchData = async () => {
         const data = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page}`)
         const dataJson = await data.json()
-        console.log(dataJson);
         setCount(dataJson.count)
         
         dataJson.results.map(async (pokemon) => {
