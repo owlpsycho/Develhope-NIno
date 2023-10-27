@@ -4,20 +4,36 @@ import Pagination from '@mui/material/Pagination';
 
 export function PokemonList() {
     const [pokemonData, setPokemonData] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const [count, setCount] = useState(0);
 
-    const fetchData = async () => {
-        const data = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page}`)
-        const dataJson = await data.json()
-        setCount(dataJson.count)
-        
-        dataJson.results.map(async (pokemon) => {
+
+    const fetchPokemonDetails= async  (arrPokemon) => {
+            console.log(arrPokemon);
+            arrPokemon.map(async (pokemon) => {
             const response = await fetch(pokemon.url);
             const responseJson = await response.json();
             setPokemonData(prev=>[...prev, responseJson]);
         }
-        )
+        ) 
+        
+    }
+
+    const fetchData = async () => {
+        const data = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page}`)
+        const dataJson = await data.json()
+        console.log(dataJson);
+        setCount(dataJson.count)
+        
+        fetchPokemonDetails(dataJson.results)
+
+
+        /* dataJson.results.map(async (pokemon) => {
+            const response = await fetch(pokemon.url);
+            const responseJson = await response.json();
+            setPokemonData(prev=>[...prev, responseJson]);
+        }
+        ) */
     }
 
     useEffect(() => {
@@ -29,7 +45,13 @@ export function PokemonList() {
     }, [page])
 
     const handlePage = (_event, value) => {
-        setPage(value);
+        console.log(value);
+        if(page == 1) {
+            setPage(0)
+        } else {
+
+        setPage((value -1) * 20);
+        }
         setPokemonData([]);
     }
 

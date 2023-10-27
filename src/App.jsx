@@ -3,19 +3,31 @@ import './App.css'
 import {Routes, Route} from 'react-router-dom'
 import HomePokedex from "./HomePokedex"
 import { PokemonDetails } from "./PokemonDetails"
-import { useContextName } from "./Contex/useContexName"
+import { useContextTheme } from "./Contex/useContextTheme"
+import Layout from "./Layout"
+import { useState } from "react"
+
 
 const App = () => {
+
+  const[theme,setTheme]=useState({theme:"light"})
+
+  const handleThemes=(e) => {
+    setTheme( prevTheme => { return {...prevTheme,theme:e.target.value}} )
+    
+  }
   
   return (
     <>
-    <useContextName.Provider value={{name: "pippo"}}>
+    <useContextTheme.Provider value={theme}>
+      <Layout handleTheme={handleThemes}>
         <Routes>
           <Route path='/' element={<HomePokedex />} />
           <Route path="/pokedex" element={<PokemonList />} />
           <Route path="/pokemondetails/:pokemonname" element={<PokemonDetails />} />
         </Routes>
-      </useContextName.Provider>
+        </Layout>
+      </useContextTheme.Provider>
     </>
   )
 }
